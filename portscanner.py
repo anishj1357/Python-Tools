@@ -8,9 +8,10 @@ def connScan(tar_Host,tar_Port):
 	try:
 		sock = socket(AF_INET,SOCK_STREAM)
 		sock.connect((tar_Host,tar_Port))
-		print("[+] {} TCP port is Open".format(tar_Port))
+		banner = sock.recv(1024)
+		print("[+]{}:{} running {}".format(tar_Host,tar_Port,banner))
 	except:
-		print("[-] {} TCP port closed".format(tar_Port))
+		pass
 	finally:
 		sock.close()
 
@@ -22,28 +23,31 @@ def portScanner(tar_Host,tar_Ports):
 		print("Unknown Host {}".format(tar_Host))
 	try:
 		tar_name = gethostbyaddr(tar_Host)
-		print("[+] Scan Results for {} ".format(tar_name[0]))
 	except:
-		print("[+] Scan Results for {} ".format(tar_IP))
-	setdefaulttimeout(10)
-	for tar_Port in tar_Ports:
-		t = Thread(target = connScan, args =(tar_Host, int(tar_Port)))
-		t.start()
+		pass
+	setdefaulttimeout(2)
+	t = Thread(target = connScan, args =(tar_Host, int(tar_Ports)))
+	t.start()
 
 
 def main():
 	parser = optparse.OptionParser('Usage of the scanner: ' + '-H <target Host> -p <target Port>')
 	parser.add_option('-H', dest = 'tar_Host', type = 'string', help = 'Specify the Target Host')
-	parser.add_option('-p', dest = 'tar_Port', type = 'string', help = 'Specify the Target Ports seperated by comma')
+	parser.add_option('-p', dest = 'tar_Port', type = 'string', help = 'Enter the port number till you want to scan')
 	(options, args) = parser.parse_args()
 	tar_Host = options.tar_Host
-	tar_Ports = str(options.tar_Port).split(",")
+	tar_Ports = int(options.tar_Port)
 	if (tar_Host == None) | (tar_Ports == None):
 		print(parser.usage)
 		exit(0)
-
-	portScanner(tar_Host,tar_Ports)
+	print("[+] Scan Results for {} ".format(tar_Host))
+	for range_Ports in range(0,tar_Ports+1):
+		portScanner(tar_Host,range_Ports)
 
 
 if __name__ == '__main__':
-	main()
+	try:
+		main()
+	except KeyboardInterrupt:
+		print("Thank you for using it")
+
