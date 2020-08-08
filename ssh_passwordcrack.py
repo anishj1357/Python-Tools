@@ -26,7 +26,7 @@ def connect(user,host,password):
 def main():
 	host = input("Enter the Host IP address: ")
 	user = input("Enter the username which you want to brute force:")
-	file = open("password1.txt","r")
+	file = open("password.txt","r")
 	for password in file.readlines():
 		password = password.strip('\n')
 		try:
