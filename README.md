@@ -1,3 +1,2 @@
 # Python-Tools
-Penetration tools and Network tools built using Python.
-For Educational purposes only.
+**Tools for cracking built using python3
